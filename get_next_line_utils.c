@@ -6,7 +6,7 @@
 /*   By: lesescob <lesescob@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:33:50 by lesescob          #+#    #+#             */
-/*   Updated: 2025/01/29 18:44:30 by lesescob         ###   ########.fr       */
+/*   Updated: 2025/02/04 18:22:26 by lesescob         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	while (s2[j] != '\0')
 		str[i++] = s2[j++];
 	str[i] = '\0';
+	free (s1);
 	return (str);
 }
 
