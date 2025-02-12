@@ -6,7 +6,7 @@
 /*   By: lesescob <lesescob@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:33:50 by lesescob          #+#    #+#             */
-/*   Updated: 2025/02/04 18:22:26 by lesescob         ###   ########.fr       */
+/*   Updated: 2025/02/12 11:58:07 by lesescob         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,28 +63,49 @@ size_t	ft_strlen(const char *str)
 
 char	*ft_substr(char *s, unsigned int start, size_t len)
 {
-	char			*sub_str;
-	unsigned int	i;
+	char	*sub_str;
+	size_t	s_len;
+	size_t	i;
 
+	i = 0;
 	if (!s)
 		return (NULL);
-	if (start > (unsigned int)ft_strlen(s))
+	s_len = ft_strlen(s);
+	if (start >= s_len)
 	{
-		sub_str = malloc(sizeof(char));
+		sub_str = malloc(1);
+		if (!sub_str)
+			return (NULL);
+		sub_str[0] = '\0';
 		return (sub_str);
 	}
-	if (ft_strlen(s) - start > len)
-		sub_str = malloc(sizeof(char) * ((len + 1)));
-	else
-		sub_str = malloc(sizeof(char) * ((ft_strlen(s) - start) + 1));
-	if (sub_str == NULL)
+	if (s_len - start < len)
+		len = s_len - start;
+	sub_str = malloc(len + 1);
+	if (!sub_str)
 		return (NULL);
-	i = 0;
-	while ((char)s[start] && (size_t)i < len)
-	{
-		sub_str[i++] = (char)s[start];
-		start++;
-	}
-	sub_str[i] = 0;
+	while (s[start] && i < len)
+		sub_str[i++] = s[start++];
+	sub_str[i] = '\0';
 	return (sub_str);
+}
+
+void	*ft_calloc(size_t nmenb, size_t size)
+{
+	void	*result;
+	size_t	index;
+
+	index = 0;
+	result = malloc(nmenb * size);
+	if (result == NULL)
+		return (NULL);
+	else
+	{
+		while (index < (nmenb * size))
+		{
+			*((unsigned char *)result + index) = '\0';
+			index++;
+		}
+	}
+	return (result);
 }
