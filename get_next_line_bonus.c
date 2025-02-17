@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lesescob <lesescob@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/29 18:28:34 by lesescob          #+#    #+#             */
-/*   Updated: 2025/02/17 16:18:09 by lesescob         ###   ########.fr       */
+/*   Created: 2025/02/17 15:55:44 by lesescob          #+#    #+#             */
+/*   Updated: 2025/02/17 17:45:48 by lesescob         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_read_join(char *statica, int fd)
 {
@@ -81,36 +81,45 @@ char	*ft_update_static(char *statica)
 
 char	*get_next_line(int fd)
 {
-	static char	*statica;
+	static char	*statica[FD_MAX];
 	char		*line;
 	char		*temp;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd >= FD_MAX)
 		return (NULL);
-	statica = ft_read_join(statica, fd);
-	if (!statica)
+	statica[fd] = ft_read_join(statica[fd], fd);
+	if (!statica[fd])
 		return (NULL);
-	line = ft_get_line(statica);
-	temp = ft_update_static(statica);
-	statica = temp;
+	line = ft_get_line(statica[fd]);
+	temp = ft_update_static(statica[fd]);
+	statica[fd] = temp;
 	return (line);
 }
-
-/*int main()
+/*int main(void)
 {
-	char *line;
-	int fd = open("text.txt", O_RDONLY);
+	int fd1 = open("text.txt", O_RDONLY);
+	int fd2 = open("text1.txt", O_RDONLY);
+	char *line1;
+	char *line2;
 
-	if (fd < 0)
+	if (fd1 < 0 || fd2 < 0)
+		return (printf("Error abriendo archivos\n"), 1);
+
+	while ((line1 = get_next_line(fd1)) || (line2 = get_next_line(fd2)))
 	{
-		printf("Error al abrir el archivo\n");
-		return (1);
+		if (line1)
+		{
+			printf("FD1: %s", line1);
+			free(line1);
+		}
+		if (line2)
+		{
+			printf("FD2: %s", line2);
+			free(line2);
+		}
 	}
-	while ((line = get_next_line(fd)) != NULL)
-	{
-		printf("%s", line);
-		free(line);  // Libera la memoria después de cada línea
-	}
-	close(fd);  // Cierra el archivo cuando terminamos
+
+	close(fd1);
+	close(fd2);
 	return (0);
 }*/
